@@ -43,7 +43,7 @@ export const cs_data_private: RoadData = {
       grade: 1,
       amount: '총 9챕터',
       price: 0,
-      category: 'posting',
+      category: '깃허브'
     },
     {
       uuid: '5',
@@ -52,7 +52,7 @@ export const cs_data_private: RoadData = {
       grade: 0,
       amount: '총 6챕터',
       price: 0,
-      category: 'posting',
+      category: '개인블로그',
     },
   ],
   children: [network_data_private, hardware_os_data_private],
