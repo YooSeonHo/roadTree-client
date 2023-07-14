@@ -18,19 +18,19 @@ export const front_react_data_private: RoadData = {
     {
       uuid: '2',
       title : "노마드코더 영화 웹서비스 만들기",
-      url : "https://opentutorials.org/course/4900",
+      url : "https://nomadcoders.co/react-for-beginners",
       grade: 1,
-      category : "video",
-      amount : "총 10챕터",
-      price : 0
+      amount : "총 6시간 12분",
+      price : 0,
+      category : "노마드코더"
     },
     {
       uuid: '3',
       title : "코딩애플 기초부터 쇼핑몰 프로젝트까지 ",
       url : "https://codingapple.com/course/react-basic/",
       grade: 1,
-      amount : "총 시간 분",
-      price : 0,
+      amount : "총 8시간 3분",
+      price : 83000,
       category : "코딩애플"
     },
     {
@@ -44,7 +44,7 @@ export const front_react_data_private: RoadData = {
     }
     ,
     {
-      uuid: '3',
+      uuid: '5',
       title : "velopert 리액트 포스팅(김민준)",
       url : "https://velopert.com/category/dev-log",
       grade: 2,

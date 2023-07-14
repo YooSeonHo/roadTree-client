@@ -22,7 +22,7 @@ export const front_css_private: RoadData = {
       grade: 0,
       amount: '총 13시간',
       price: 108000,
-      category: '노마드 코더',
+      category: '노마드코더',
     },
     {
       uuid: '2',
