@@ -1,7 +1,7 @@
 'use client';
 
-import { supabase, midbase } from '@/lib/supabase/supabase';
-import { WithLogin } from '@/src/components/HOC/withLogin';
+import { supabase } from '@/lib/supabase/supabase';
+// import { WithLogin } from '@/src/components/HOC/withLogin';
 import RoadTreeLayout, {
   useRoadTreeStore,
 } from '@/src/components/RoadmapPage/RoadTreeLayout';
@@ -17,20 +17,45 @@ interface roadmapParams {
 function page({ params }: { params: roadmapParams }) {
   const { studyType } = params;
   const whatStudy: number = studyType;
-  const whatStudyTable = ['front', 'back', 'ai'];
+  const whatStudyTable = ['frontend', 'backend', 'ai'];
   const router = useRouter();
 
   const [id, setId] = useState<string>('');
 
   useEffect(() => {
+    if (whatStudy == 2) {
+      alert('Ai 과정은 준비중입니다.');
+      router.push('/');
+    }
     const getUser = async () => {
-      const user = await midbase.auth.getUser();
-      const userId: string | undefined = user.data.user?.id;
-      userId && setId(userId);
+      const user = await supabase.auth.getUser();
+      if (!user.data.user) {
+        supabase.auth
+          .signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo:
+                (process.env.NEXT_PUBLIC_URL_HOST ?? '') +
+                '/roadmap/' +
+                whatStudy.toString(),
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              },
+            },
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else if (user.data.user) {
+        const userId: string | undefined = user.data.user?.id;
+        userId && setId(userId);
+      }
     };
     getUser();
 
-    track(`[amplitude] enter_${whatStudyTable[whatStudy]}_roadmap_page`);
+    console.log(`[amplitude] enter_${whatStudyTable[whatStudy]}_roadmap_page`);
+    track(`enter_${whatStudyTable[whatStudy]}_roadmap_page`);
   }, []);
 
   return (
@@ -48,6 +73,6 @@ function page({ params }: { params: roadmapParams }) {
   );
 }
 
-const RoadMapWithLogin = WithLogin(page);
+const RoadMapWithLogin = page;
 
 export default RoadMapWithLogin;
