@@ -46,16 +46,18 @@ export const Header = () => {
   useEffect(() => {
     console.log('header useEffect');
     const checkUser = async () => {
-      console.log('checkUser start');
+      console.log('checkUser');
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
         console.log('login good :', user);
+        track('[debug] login_success', { userId: user })
         setIsLogin(true);
         initAmplitude(user.id);
       } else {
         console.log('login fail :', user);
+         track('[debug] login_fail', { userId: user })
         setIsLogin(false);
         initAmplitude('');
       }
