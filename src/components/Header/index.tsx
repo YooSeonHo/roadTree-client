@@ -49,9 +49,11 @@ export const Header = () => {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
+        console.log('login good :', user);
         setIsLogin(true);
         initAmplitude(user.id);
       } else {
+        console.log('login fail :', user);
         setIsLogin(false);
         initAmplitude('');
       }

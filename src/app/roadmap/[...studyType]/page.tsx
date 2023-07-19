@@ -33,6 +33,7 @@ function page({ params }: { params: roadmapParams }) {
       userId && setId(userId);
     };
     getUser();
+    console.log('page.tsx', id);
 
     track(`enter_${whatStudyTable[whatStudy]}_roadmap_page`);
   }, []);
