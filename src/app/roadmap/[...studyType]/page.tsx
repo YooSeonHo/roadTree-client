@@ -23,17 +23,19 @@ function page({ params }: { params: roadmapParams }) {
   const [id, setId] = useState<string>('');
 
   useEffect(() => {
+    console.log('roadmap page useEffect');
     if (whatStudy == 2) {
       alert('AI 과정은 준비중입니다.');
       router.push('/');
     }
     const getUser = async () => {
+      console.log('getUser start');
       const user = await supabase.auth.getUser();
       const userId: string | undefined = user.data.user?.id;
       userId && setId(userId);
     };
     getUser();
-    console.log('page.tsx', id);
+    console.log('getUser function', id);
 
     track(`enter_${whatStudyTable[whatStudy]}_roadmap_page`);
   }, []);

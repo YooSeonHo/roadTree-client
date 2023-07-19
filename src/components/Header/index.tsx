@@ -44,7 +44,9 @@ export const Header = () => {
   };
 
   useEffect(() => {
+    console.log('header useEffect');
     const checkUser = async () => {
+      console.log('checkUser start');
       const {
         data: { user },
       } = await supabase.auth.getUser();
