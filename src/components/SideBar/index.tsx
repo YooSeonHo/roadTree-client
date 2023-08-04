@@ -1,11 +1,11 @@
-'use client';
+"use client";
 import {
   BookIcon,
   ChatIcon,
   ClipIcon,
   ListBulletIcon,
-} from '@/src/assets/Icons';
-import { usePathname } from 'next/navigation';
+} from "@/src/assets/Icons";
+import { usePathname } from "next/navigation";
 
 export const SideBar = () => {
   const path = usePathname();
@@ -17,9 +17,9 @@ export const SideBar = () => {
           <nav className="px-6 mt-10 ">
             <a
               className={`hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  ${
-                path === '/'
-                  ? 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded'
-                  : 'text-gray2'
+                path === "/"
+                  ? "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded"
+                  : "text-gray2"
               }  `}
               href="#"
             >
@@ -29,9 +29,9 @@ export const SideBar = () => {
             </a>
             <a
               className={`hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  ${
-                path === '/1'
-                  ? 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded'
-                  : 'text-gray2'
+                path === "/1"
+                  ? "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded"
+                  : "text-gray2"
               }  `}
               href="#"
             >
@@ -41,9 +41,9 @@ export const SideBar = () => {
             </a>
             <a
               className={`hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  ${
-                path === '/2'
-                  ? 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded'
-                  : 'text-gray2'
+                path === "/2"
+                  ? "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded"
+                  : "text-gray2"
               }  `}
               href="#"
             >
@@ -60,9 +60,9 @@ export const SideBar = () => {
             </a>
             <a
               className={`hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  ${
-                path === '/3'
-                  ? 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded'
-                  : 'text-gray2'
+                path === "/3"
+                  ? "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded"
+                  : "text-gray2"
               }  `}
               href="#"
             >
