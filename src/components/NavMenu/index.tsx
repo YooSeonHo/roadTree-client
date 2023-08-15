@@ -1,10 +1,15 @@
 "use client";
 
 import { useModal } from "@/src/utils/hooks/useModal";
+import { useNicknameStore } from "@/src/state/store";
+import Image from "next/image";
 import Link from "next/link";
+import { ExitIcon, UserIcon } from "@/src/assets/Icons/HeaderIcons";
 
-export const NavMenu = (props: { Logout: () => void }) => {
-  const { isOpen, modalRef, toggleModal, closeModal } = useModal();
+export const NavMenu = (props: { Logout: () => void; userPicture: string }) => {
+  const { isOpen, modalRef, toggleModal } = useModal();
+  const { nickname, email } = useNicknameStore();
+
   return (
     <div className="h-13 relative sm:py-0.5" ref={modalRef}>
       <div className="flex flex-row-reverse p-3 text-gray-500">
@@ -26,50 +31,47 @@ export const NavMenu = (props: { Logout: () => void }) => {
             </g>
           </svg>
           {/* md 보다 클 경우 유저 아이콘*/}
-          {/* <Image
-                        src={"/header/user.svg"}
-                        alt={"user"}
-                        width={512}
-                        height={512}
-                        className="hidden w-7 h-7 md:flex"
-                    ></Image> */}
-          <button
-            className="justify-center hidden p-3 text-base font-semibold text-white md:flex rounded-2xl bg-main hover:brightness-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:text-white/70"
-            onClick={() => {
-              props.Logout();
-            }}
-          >
-            로그아웃
-          </button>
+          <Image
+            src={props.userPicture ?? "/header/user.svg"}
+            alt={"user"}
+            width={512}
+            height={512}
+            className="hidden rounded-full select-none w-7 h-7 md:flex"
+          ></Image>
+          {/* <button
+                        className="justify-center hidden p-3 text-base font-semibold text-white md:flex rounded-2xl bg-main hover:brightness-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:text-white/70"
+                        onClick={() => {
+                            props.Logout();
+                        }}
+                    >
+                        로그아웃
+                    </button> */}
         </div>
       </div>
 
       {isOpen && (
-        <div className="fixed right-0 z-10 w-full p-2 pt-4 sm:absolute sm:w-auto md:hidden">
-          <div className="top-auto w-full text-black bg-white rounded-md sm:w-40 shadow-deep-dark">
-            <div className="z-50 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
-              <div className="hidden px-4 py-3" role="none">
+        <div className="fixed right-0 z-10 w-full p-2 pt-4 sm:absolute sm:w-auto">
+          <div className="top-auto w-full text-black bg-white border rounded-xl sm:w-40 border-gray6">
+            <div className="z-50 text-base list-none bg-white divide-gray-10 rounded-xl dark:bg-gray-700 dark:divide-gray-600">
+              <div className="px-4 py-2" role="none">
                 <p
-                  className="text-sm text-gray-900 dark:text-white"
+                  className="text-sm text-gray-900 truncate dark:text-white"
                   role="none"
                 >
-                  Neil Sims
-                </p>
-                <p
-                  className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                  role="none"
-                >
-                  neil.sims@flowbite.com
+                  {nickname} ({email})
                 </p>
               </div>
-              <ul className="hidden xpy-1" role="none">
+              <ul onClick={toggleModal} className="xpy-1 " role="none">
                 <li>
                   <Link
                     href={"/profile"}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
-                    내 프로필
+                    <div className="flex items-center text-center align-middle gap-x-2">
+                      <UserIcon />
+                      프로필
+                    </div>
                   </Link>
                 </li>
                 <li>
@@ -78,16 +80,14 @@ export const NavMenu = (props: { Logout: () => void }) => {
                     className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
-                    로그아웃
+                    <div className="flex items-center text-center align-middle gap-x-2">
+                      <ExitIcon />
+                      로그아웃
+                    </div>
                   </div>
                 </li>
               </ul>
-              <ul
-                className="xpy-1 md:hidden"
-                onClick={() => {
-                  closeModal();
-                }}
-              >
+              <ul onClick={toggleModal} className="xpy-1 md:hidden">
                 <li>
                   <div
                     onClick={() => {
@@ -98,6 +98,15 @@ export const NavMenu = (props: { Logout: () => void }) => {
                   >
                     피드백
                   </div>
+                </li>
+                <li>
+                  <Link
+                    href={"/daily"}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem"
+                  >
+                    데일리학습
+                  </Link>
                 </li>
                 <li>
                   <Link

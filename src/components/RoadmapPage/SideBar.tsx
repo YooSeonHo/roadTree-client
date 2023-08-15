@@ -1,24 +1,27 @@
 "use client";
 
-import { RoadData } from "@/roadmap_json/roadmap_data";
+import { RoadData, reference } from "@/roadmap_json/roadmap_data";
 import RefBlock from "./RefBlock";
 import { useRoadTreeStore } from "./RoadTreeLayout";
 import StudyDropMenu from "./StudyDropMenu";
 import mouseDragHook from "@/src/utils/hooks/mouseDragHook";
 import { useEffect, useState } from "react";
-import { postNodeData, postProps } from "@/src/api";
 import { track } from "@amplitude/analytics-browser";
 import { useWindowResize } from "@/src/utils/hooks/useWindowResize";
+import { getReferenceUsingNid } from "@/src/api/initNode";
+import { postNodeStateProps, upsertNodeState } from "@/src/api/stateApi";
 
 export default function SideBar(props: {
   whatStudy: number;
   userId: string;
   showRef: {
-    isShowRef: boolean;
-    setIsShowRef: (isShowRef: boolean) => void;
-  };
+    isShowRef: boolean,
+    setIsShowRef: (isShowRef: boolean) => void
+  }
+  select: RoadData | null
 }) {
-  const { select, setSelect, updateFunc } = useRoadTreeStore();
+  const select = props.select;
+  const { setSelect, updateFunc } = useRoadTreeStore();
   const [init, setInit] = useState<RoadData | null>(null);
   const [refBlockInit, setRefBlockInit] = useState<boolean>(false); // refBlock 초기화 여부
   const [nodeState, setNodeStateNum] = useState<number>(0); // 0: 학습안함, 1: 학습예정, 2: 학습중, 3: 학습완료
@@ -32,6 +35,8 @@ export default function SideBar(props: {
   const userId: string = props.userId;
   const { isShowRef, setIsShowRef } = props.showRef;
   const useWindowResizeVar: boolean = useWindowResize();
+
+  const [references, setReferences] = useState<reference[]>([]);
 
   const sidebarWeightEnd: () => void = () => {
     //  ('[amplitude] resize_sidebar');
@@ -78,39 +83,43 @@ export default function SideBar(props: {
       setNodeStateNum(num);
       select.state = num;
 
-      const postProp: postProps = {
-        roadmap_type: whatStudy,
-        depth: select.depth ?? 1,
+      const postProp: postNodeStateProps = {
         state: stateTable[num],
-        node_id: select.nid,
+        node_id: select.nid as string,
         user_id: userId,
       };
 
-      postNodeData(postProp);
+      upsertNodeState(postProp);
 
       updateFunc(select);
     }
   };
 
-  const isLoading: boolean = select !== init;
+  const setInitReferences: (selectNid: string) => void = (
+    selectNid: string
+  ) => {
+    getReferenceUsingNid(selectNid).then((data) => {
+      setReferences(data);
+    });
+  };
 
   useEffect(() => {
     if (select !== null && select !== init) {
       setNodeStateNum(select.state ?? 0);
       setRefBlockInit(false);
+      setInitReferences(select.nid as string);
       // 초기화 작업 진행
       setInit(select);
     }
   }, [select]);
 
   if (select !== null && isShowRef) {
-    if (!isLoading) {
       return (
         <div
           id={select.nid.toString()}
-          className={`w-full fixed right-0 bg-white h-screenWithoutHeader z-40 md:w-[${sidebarWeight}px] border-l border-gray-200 shadow-deep-dark resize-x ${
+          className={`w-full fixed right-0 bg-white h-screenWithoutHeader z-1 md:w-[${sidebarWeight}px] border-x-2 border-gray6 resize-x ${
             resizing ? "select-none" : ""
-          }`}
+            }`}
         >
           <div
             id="changeSidebarWeight"
@@ -126,16 +135,25 @@ export default function SideBar(props: {
           >
             <div className="bg-blue-400 w-[2px] h-full"></div>
           </div>
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full p-3">
             {/* side bar top height : 32 */}
             <div
               id="roadmap_sidebar_top"
-              className="flex items-center justify-between h-12 py-1 mx-5 border-b-2"
+              className="flex items-center justify-between py-1 mx-5"
             >
               {/* side bar content height : 24  */}
-              <div className="m-1 text-base font-bold text-gray-600 font-display">
+              <div className="flex gap-2">
+              <div className="p-1 text-2xl font-bold leading-relaxed font-display sm:leading-normal">
                 {select?.name}
               </div>
+              <div className="py-2 w-fit">
+                <StudyDropMenu
+                  node
+                  stateNum={nodeState}
+                  setStateNum={changeNodeStateNum}
+                />
+              </div>
+            </div>
               <div
                 className="p-1 rounded hover:bg-gray-100"
                 onClick={() => {
@@ -176,30 +194,19 @@ export default function SideBar(props: {
               id="roadmap_sidebar_body"
               className="flex-grow px-5 overflow-y-scroll"
             >
-              <div className="p-1 text-2xl font-bold leading-relaxed font-display sm:leading-normal">
-                {select?.name}
-              </div>
-              <div className="p-1 text-sm">{select?.description}</div>
-              <div className="py-2 w-fit">
-                <StudyDropMenu
-                  node
-                  stateNum={nodeState}
-                  setStateNum={changeNodeStateNum}
-                />
-              </div>
+              <div className="p-1 text-base">{select?.description}</div>
 
-              <div className="py-3 m-1">
-                <div className="py-2 font-semibold text-gray-600">
-                  학습 내용
-                </div>
-                <div className="border border-gray-200 rounded shadow-md">
-                  {select?.ref?.map((item, index) => {
+              <div className="m-1 ">
+              {(references.length > 0) && <div className="py-2 font-semibold text-gray3">학습 내용</div>}
+                <div className="flex flex-col gap-y-2">
+                  {references.map((item, index) => {
                     return (
                       <div
                         key={"key" + index}
-                        className="w-full h-20 bg-white border-b-1"
+                        className="w-full h-20 border-2 rounded-lg border-gray6"
                       >
                         <RefBlock
+                          key={"refBlock" + index}
                           refdata={item}
                           whatStudy={whatStudy}
                           userId={userId}
@@ -219,7 +226,4 @@ export default function SideBar(props: {
     } else {
       return <></>; // 스켈레톤 화면
     }
-  } else {
-    return <></>; // 없는 화면
-  }
 }
