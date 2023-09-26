@@ -1,7 +1,14 @@
+import { Header } from "@/src/components/Header";
+
 export default function ContentsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="mx-auto max-w-7xl">{children}</div>;
+  return (
+    <>
+      <Header />
+      <div className="mx-auto max-w-7xl mt-[72px]">{children}</div>
+    </>
+  );
 }

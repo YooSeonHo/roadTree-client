@@ -4,6 +4,8 @@ import { Draggable } from "react-beautiful-dnd";
 import Block from "./Block";
 import { getNodeNameFromRid } from "@/src/api/profile";
 import { useRouter } from "next/navigation";
+import ReferenceBlock from "../ReferenceBlock/ReferenceBlock";
+import { track } from "@amplitude/analytics-browser";
 
 export interface CardProps {
   cardId: string;
@@ -25,6 +27,11 @@ const Card = (props: CardProps) => {
         return;
       }
       const typeValue = res.type === "front" ? 0 : 1;
+      track("click_ref_link_on_profile", {
+        roadmapCategory: typeValue,
+        refId: rid,
+        NodeName: res.name,
+      });
       router.push(
         "/roadmap/" + typeValue + "?node=" + res.name + "&ref=" + rid,
       );
@@ -53,7 +60,7 @@ const Card = (props: CardProps) => {
             `}
           >
             <div className="w-[291px] break-all whitespace-nowrap overflow-hidden text-ellipsis">
-              {content && <Block refdata={content} />}
+              {content && <ReferenceBlock refdata={content} isDropMenu={false}  />}
             </div>
           </div>
         </div>

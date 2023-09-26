@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <meta property="og:title" content="roadtree" />
@@ -24,13 +24,14 @@ export default function RootLayout({
         />
         <meta property="og:image" content="/logo.png" />
       </head>
-      <body className={"h-screenWithoutHeader w-full dark:bg-gray-900"}>
+      <body
+        className={"h-screenWithoutHeader w-full "}
+        suppressHydrationWarning={true}
+      >
         <Providers>
           <div id="modal_root"></div>
-          <Header />
-          <div className="mt-[72px]">{children}</div>
+          {children}
         </Providers>
-        <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"

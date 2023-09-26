@@ -14,15 +14,15 @@ export const NavMenu = (props: {
 }) => {
   const { isOpen, modalRef, toggleModal } = useModal();
   const { nickname, email } = useNicknameStore();
-  const navMenu = ["프론트엔드", "백엔드", "인공지능"];
+  const navMenu = ["프론트엔드", "백엔드"];
 
   return (
     <div className="h-13 relative sm:py-0.5" ref={modalRef}>
       <div className="flex flex-row-reverse p-3 text-gray-500">
         <div
           onClick={() => {
+            track("click_user_icon", { isOpening: isOpen, from: props.pathName });
             toggleModal();
-            track("click_user_icon", { isOpening: isOpen });
           }}
           className="cursor-pointer"
         >
@@ -50,24 +50,16 @@ export const NavMenu = (props: {
             height={512}
             className="hidden rounded-full select-none w-7 h-7 md:flex"
           ></Image>
-          {/* <button
-                        className="justify-center hidden p-3 text-base font-semibold text-white md:flex rounded-2xl bg-main hover:brightness-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:text-white/70"
-                        onClick={() => {
-                            props.Logout();
-                        }}
-                    >
-                        로그아웃
-                    </button> */}
         </div>
       </div>
 
       {isOpen && (
         <div className="fixed right-0 z-10 w-full p-2 pt-4 sm:absolute sm:w-auto">
           <div className="top-auto w-full text-black bg-white border rounded-xl sm:w-40 border-gray6">
-            <div className="z-50 text-base list-none bg-white divide-gray-10 rounded-xl dark:bg-gray-700 dark:divide-gray-600">
+            <div className="z-50 text-base list-none bg-white divide-gray-10 rounded-xl ">
               <div className="px-4 py-2" role="none">
                 <p
-                  className="text-sm text-gray-900 truncate dark:text-white"
+                  className="text-sm text-gray-900 truncate "
                   role="none"
                 >
                   {nickname} ({email})
@@ -77,8 +69,9 @@ export const NavMenu = (props: {
                 <li>
                   <Link
                     href={"/profile"}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                     role="menuitem"
+                    onClick={() => {track("click_go_profile_page_header_btn", { from: props.pathName });}}
                   >
                     <div className="flex items-center text-center align-middle gap-x-2">
                       <UserIcon />
@@ -89,7 +82,7 @@ export const NavMenu = (props: {
                 <li>
                   <div
                     onClick={props.Logout}
-                    className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 "
                     role="menuitem"
                   >
                     <div className="flex items-center text-center align-middle gap-x-2">
@@ -109,7 +102,7 @@ export const NavMenu = (props: {
                         isOpen: true,
                       });
                     }}
-                    className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 "
                     role="menuitem"
                   >
                     피드백
@@ -118,7 +111,7 @@ export const NavMenu = (props: {
                 <li>
                   <Link
                     href={"/daily"}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                     role="menuitem"
                     onClick={() => {
                       track("click_go_daily_page_header_btn", {
@@ -143,7 +136,7 @@ export const NavMenu = (props: {
                             isOpen: true,
                           });
                         }}
-                        className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white`}
+                        className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 `}
                         role="menuitem"
                       >
                         {menu}
@@ -151,20 +144,6 @@ export const NavMenu = (props: {
                     </li>
                   );
                 })}
-                <li>
-                  <button
-                    onClick={() => {
-                      track("click_logout_header_btn", {
-                        from: props.pathName,
-                      });
-                      props.Logout();
-                    }}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white text-start"
-                    role="menuitem"
-                  >
-                    로그아웃
-                  </button>
-                </li>
               </ul>
             </div>
           </div>
