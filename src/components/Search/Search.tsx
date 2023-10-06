@@ -134,6 +134,7 @@ export const Search = () => {
             searchResult={searchResult}
             setSearchResult={setSearchResult}
             searchRef={searchRef}
+            
           />
         </div>
       )}

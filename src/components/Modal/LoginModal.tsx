@@ -47,7 +47,7 @@ export default function LoginModal(props: LoginModalProps) {
         },
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error)
       });
   };
   const { toggleModal, modalRef } = props;
@@ -58,6 +58,7 @@ export default function LoginModal(props: LoginModalProps) {
       aria-hidden="true"
       className="fixed inset-0 top-0 left-0 right-0 z-50 flex items-center justify-center w-full overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 h-modal md:h-full"
     >
+      
       <div ref={modalRef} className="relative w-full max-w-md p-4 md:h-auto">
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
