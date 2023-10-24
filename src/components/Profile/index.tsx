@@ -20,20 +20,20 @@ export interface ExtraInfoInterface {
   stack: string;
 }
 
-export interface ProfileProps {
-    created_at?: string;
-    email?: string;
-    id?: string;
-    nickname?: string;
-    gender?: string | null;
-    age?: number | null;
-    career?: string | null;
-    stack?: string | null;
-    profile_image?: string | null;
-    path ?: string
+export interface UserInfo {
+  created_at?: string;
+  email?: string;
+  id?: string;
+  nickname?: string;
+  gender?: string | null;
+  age?: number | null;
+  career?: string | null;
+  stack?: string | null;
+  profile_image?: string | null;
+  path?: string;
 }
 
-export default function EditProfile(props: ProfileProps) {
+export default function EditProfile(props: UserInfo) {
   const { nickname, email, setNickname, userPicture } = useNicknameStore();
   const { userId } = useLoginStore();
   const { mutate } = useMutation(postUserInfo);
@@ -63,16 +63,21 @@ export default function EditProfile(props: ProfileProps) {
 
   const onSubmit = () => {
     setNickname(watch("nickname"));
-    mutate({
-      id: userId,
-      email: email,
-      nickname: watch("nickname"),
-      gender: watch("gender"),
-      age: watch("age", 0),
-      career: watch("career"),
-      stack: watch("stack"),
-    });
-    router.push("/profile");
+    try {
+      mutate({
+        id: userId,
+        email: email,
+        nickname: watch("nickname"),
+        gender: watch("gender"),
+        age: watch("age", 0),
+        career: watch("career"),
+        stack: watch("stack"),
+      });
+      track("finish_sign_up");
+      router.push("/profile");
+    } catch {
+      console.log("error");
+    }
   };
 
   return (
